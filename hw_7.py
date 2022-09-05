@@ -23,6 +23,27 @@ with open('recipes.txt',encoding = 'utf-8') as file:
             add_ingidient(dish_recepie, ingridient)
         cook_book.update(component)
 
+def merge_shop_lists(destination, source):
+    for key in source.keys():
+        if key in destination:
+            destination[key]['quantity'] += source[key]['quantity']
+        else:
+            destination[key] = source[key]
+
+def get_shop_list_by_dishes(dishes: list, person_count: int):
+    result = {}
+    for dish in dishes:
+        shop_list = {}
+        for components in cook_book[dish]:
+            component_name = components['name']
+            component_info = {'quantity':components['quantity'] * person_count, 'measure':components['measure']}
+            shop_list[component_name] = component_info
+        merge_shop_lists(result, shop_list)
+    return result
 
 
-print(cook_book)
+        
+
+
+
+print(get_shop_list_by_dishes(['Омлет'], 3))
